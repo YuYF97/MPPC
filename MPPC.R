@@ -13,9 +13,9 @@ sourceCpp("innerconflict.cpp")
 sourceCpp("unshield_triple.cpp")
 sourceCpp("v_stru.cpp")
 ###########################
-########## Ô¤´¦Àí #########
+########## é¢„å¤„ç† #########
 ###########################
-#´¦Àí°×Ãûµ¥
+#å¤„ç†ç™½åå•
 MW.deal <- function(M.whitelist, from, to){
   M.whitelist <- unique(M.whitelist)
   add <- data.frame(from=from, to=M.whitelist[which(M.whitelist[,1]==to),2])
@@ -31,7 +31,7 @@ MW.deal <- function(M.whitelist, from, to){
 }
 
 
-#´¦ÀíºÚÃûµ¥
+#å¤„ç†é»‘åå•
 MB.deal <- function(M.whitelist, from, to){
   M.whitelist <- unique(M.whitelist)
   add <- data.frame(from=from, to=M.whitelist[which(M.whitelist[,2]==to),1])
@@ -46,14 +46,14 @@ MB.deal <- function(M.whitelist, from, to){
 }
 
 ############################
-#######Ö÷º¯ÊıÁÚ½Ó½×¶Î#######
+#######ä¸»å‡½æ•°é‚»æ¥é˜¶æ®µ#######
 ############################
 MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
                      M.blacklist=data.frame(from=NULL,to=NULL),
                      whitelist=data.frame(from=NULL,to=NULL),
                      blacklist=data.frame(from=NULL,to=NULL),max.cond=5,
                      breaksize=1, alpha=0.05, beta=0.6, record=F){
-  #¼ÓÔØR°ü
+  #åŠ è½½RåŒ…
   if (!require('bnlearn')) {
     stop('The package bnlearn was not installed')
   }
@@ -61,7 +61,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     stop('The package dplyr was not installed')
   }
   
-  #¼ÇÂ¼ÊäÈëÊı¾İ
+  #è®°å½•è¾“å…¥æ•°æ®
   if (record) {
     input <- list(data=data, M.whitelist=M.whitelist, M.blacklist=M.blacklist, whitelist=whitelist,
                   blacklist=blacklist, max.cond=max.cond, breaksize=breaksize, alpha = alpha, beta = beta)
@@ -70,32 +70,32 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
                   blacklist=blacklist, max.cond=max.cond, breaksize=breaksize, alpha = alpha, beta = beta)
   }
   
-  #¶ÁÈ¡±ß¼ÊºÚ°×Ãûµ¥
+  #è¯»å–è¾¹é™…é»‘ç™½åå•
   Marg.white <- M.whitelist
   Marg.black <- M.blacklist
   
-  #¶ÁÈ¡½Úµã
+  #è¯»å–èŠ‚ç‚¹
   nodes <- colnames(data)
-  #ÉèÖÃmaxcond
+  #è®¾ç½®maxcond
   if (is.null(max.cond)) {
     max.cond <- (length(nodes))/4
   }
-  #ÉèÖÃalpha
+  #è®¾ç½®alpha
   if (is.null(alpha)) {
     alpha <- max(0.05/length(nodes), 0.0001)
   }
-  #ÉèÖÃbeta
+  #è®¾ç½®beta
   if (is.null(beta)) {
     beta <- alpha
   }
-  #ÅĞ¶Ïbeta
+  #åˆ¤æ–­beta
   if (alpha>beta) {
     return("ERROR: alpha < beta")
   }
-  #ÉèÖÃÎŞÏò±ßÅĞ¶ÏË³Ğò
+  #è®¾ç½®æ— å‘è¾¹åˆ¤æ–­é¡ºåº
   order <- as.data.frame(t(combn(nodes, 2)))
   colnames(order) <- c("from","to")
-  # #Éú³ÉÈ«Í¼
+  # #ç”Ÿæˆå…¨å›¾
   mpbn <- matrix(1,nrow = length(nodes), ncol = length(nodes))
   colnames(mpbn) <- nodes
   rownames(mpbn) <- nodes
@@ -105,8 +105,8 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   # # plot(comDAG)
   # mpbn <- comDAG
   
-  #ºÚ°×Ãûµ¥´¦Àí
-  #´¦Àí°×Ãûµ¥
+  #é»‘ç™½åå•å¤„ç†
+  #å¤„ç†ç™½åå•
   Marg.white <- unique(Marg.white)
   if (nrow(whitelist)>0) {
     Marg.white <- rbind(Marg.white, whitelist)
@@ -116,14 +116,14 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   }
   Marg.white <- unique(Marg.white)
   
-  #´¦ÀíºÚÃûµ¥
+  #å¤„ç†é»‘åå•
   Marg.black <- unique(Marg.black)
   if (nrow(Marg.black)>0) {
     Marg.black <- data.frame(MB_all(MBr = Marg.black, MWr = Marg.white))
   }
   Marg.black <- unique(Marg.black)
   
-  #CIÅĞ¶ÏË³Ğò
+  #CIåˆ¤æ–­é¡ºåº
   record.order <- c(1:nrow(order))
   if (nrow(Marg.black)>0) {
     revblack <- rev_search(Marg.black,Marg.black)
@@ -143,7 +143,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   # print(length(revorder))
   # print(order[revorder,])
   
-  #¾«¼ò±ß¼ÊºÚ°×Ãûµ¥£¬ÅĞ¶ÏÊÇ·ñÃ¬¶Ü
+  #ç²¾ç®€è¾¹é™…é»‘ç™½åå•ï¼Œåˆ¤æ–­æ˜¯å¦çŸ›ç›¾
   if (nrow(Marg.white)>0 & nrow(Marg.black)>0) {
     tmp <- conflict(MWr = Marg.white, MBr = Marg.black)
     Marg.white <- data.frame(tmp[[1]])
@@ -151,19 +151,19 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     rm(tmp)
   }
   
-  #°×Ãûµ¥
+  #ç™½åå•
   if (nrow(whitelist)>0) {
     W.order <- search(orderr = order, kwr = whitelist)
   } else {
     W.order <- c(NULL)
   }
-  #ºÚÃûµ¥
+  #é»‘åå•
   if (nrow(blacklist)>0) {
     B.order <- search(orderr = order, kwr = blacklist)
   } else {
     B.order <- c(NULL)
   }
-  #±ß¼Ê°×Ãûµ¥
+  #è¾¹é™…ç™½åå•
   if (nrow(Marg.white)>0) {
     MW.order <- search(orderr = order, kwr = Marg.white)
   } else {
@@ -172,7 +172,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   ini.Marg.white <- Marg.white
   ini.MW.order <- MW.order
   
-  #±ß¼ÊºÚÃûµ¥
+  #è¾¹é™…é»‘åå•
   if (nrow(Marg.black)>0) {
     MB.order <- search(orderr = order, kwr = Marg.black)
   } else {
@@ -183,7 +183,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   
   
   
-  #È¥³ıÒò¹û°×Ãûµ¥Ö±½Ó±ßºÍÅĞ¶Ï
+  #å»é™¤å› æœç™½åå•ç›´æ¥è¾¹å’Œåˆ¤æ–­
   if (length(W.order)>0) {
     for (i in 1:length(W.order)) {
       mpbn[whitelist[i,2],whitelist[i,1]] <- 0
@@ -191,7 +191,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     record.order <- record.order[-match(W.order, record.order)]
   }
   
-  #·Ç¸¸½Úµã¼ÇÂ¼(ºÚÃûµ¥)
+  #éçˆ¶èŠ‚ç‚¹è®°å½•(é»‘åå•)
   NPaset <- list(NULL)
   length(NPaset) <- length(nodes)
   names(NPaset) <- nodes
@@ -216,19 +216,19 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     }
   }
   
-  #¼ÇÂ¼·Ö¸ô¼¯Sepset
+  #è®°å½•åˆ†éš”é›†Sepset
   Sepset <- list(NULL)
   length(Sepset) <- nrow(order)
   
   # print("a")
-  #¼ÇÂ¼²âÊÔÊıÁ¿
+  #è®°å½•æµ‹è¯•æ•°é‡
   n.test <- 0
-  #¼ÇÂ¼·Ö¸ô¼¯ÊıÁ¿
+  #è®°å½•åˆ†éš”é›†æ•°é‡
   n.condition <- 0
-  #Ñ­»·È¥³ıÎŞÏò±ß
+  #å¾ªç¯å»é™¤æ— å‘è¾¹
   while (n.condition<=length(nodes)-2 & n.condition<=max.cond) {
-    delete.record <- c()  #¼ÇÂ¼É¾³ıÖ±½Ó±ß
-    causal.record <- c()  #¼ÇÂ¼Òò¹ûÖªÊ¶±ß
+    delete.record <- c()  #è®°å½•åˆ é™¤ç›´æ¥è¾¹
+    causal.record <- c()  #è®°å½•å› æœçŸ¥è¯†è¾¹
     if (n.condition==0) {
       for (i in record.order) {
         # p.value <- ci.test(x = order[i,1], order[i,2], data = data)
@@ -245,14 +245,14 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
       # print("b")
     } else {
       for (i in record.order) {
-        if (i %in% MW.order) { #ÅĞ¶Ï±ß¾ßÓĞ±ß¼Ê°×ÏÈÑé
+        if (i %in% MW.order) { #åˆ¤æ–­è¾¹å…·æœ‰è¾¹é™…ç™½å…ˆéªŒ
           # print(1)
           # print(Marg.white[which(MW.order==i)[1],2])
           # print(mpbn[,Marg.white[which(MW.order==i)[1],2]])
-          node.cond <- nodes[which(mpbn[,Marg.white[which(MW.order==i)[1],2]]==1)] #Ñ¡Ôñ¹û½ÚµãµÄÏàÁÚ½Úµã
-          node.cond <- node.cond[-which(node.cond==order[i,1] | node.cond==order[i,2])] #È¥³ıÒò½Úµã
-          #È¥³ı×Ó½Úµã
-          if (length(intersect(NPaset[[Marg.white[which(MW.order==i)[1],2]]], node.cond))>0) { #ÅĞ¶ÏÑ¡ÔñµÄ½ÚµãÀïÓĞÃ»ÓĞ·Ç¸¸½Úµã
+          node.cond <- nodes[which(mpbn[,Marg.white[which(MW.order==i)[1],2]]==1)] #é€‰æ‹©æœèŠ‚ç‚¹çš„ç›¸é‚»èŠ‚ç‚¹
+          node.cond <- node.cond[-which(node.cond==order[i,1] | node.cond==order[i,2])] #å»é™¤å› èŠ‚ç‚¹
+          #å»é™¤å­èŠ‚ç‚¹
+          if (length(intersect(NPaset[[Marg.white[which(MW.order==i)[1],2]]], node.cond))>0) { #åˆ¤æ–­é€‰æ‹©çš„èŠ‚ç‚¹é‡Œæœ‰æ²¡æœ‰éçˆ¶èŠ‚ç‚¹
             node.cond <- node.cond[-match(intersect(NPaset[[Marg.white[which(MW.order==i)[1],2]]], node.cond), node.cond)]
           }
           if (length(node.cond)<n.condition) {
@@ -260,12 +260,12 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
           } else {
             cond.order <- as.data.frame(t(combn(node.cond, n.condition)))
           }
-        } else if (i %in% MB.order) { #ÅĞ¶Ï±ß¾ßÓĞ±ß¼ÊºÚÏÈÑé
+        } else if (i %in% MB.order) { #åˆ¤æ–­è¾¹å…·æœ‰è¾¹é™…é»‘å…ˆéªŒ
           # print(2)
           # print(Marg.black[which(MB.order==i)[1],1])
-          node.cond <- nodes[which(mpbn[,Marg.black[which(MB.order==i)[1],1]]==1)] #Ñ¡Ôñ¹û½ÚµãµÄÏàÁÚ½Úµã
-          node.cond <- node.cond[-which(node.cond==order[i,1] | node.cond==order[i,2])] #È¥³ıÒò½Úµã
-          if (length(intersect(NPaset[[Marg.black[which(MB.order==i)[1],1]]], node.cond))>0) { #ÅĞ¶ÏÑ¡ÔñµÄ½ÚµãÀïÓĞÃ»ÓĞ·Ç¸¸½Úµã
+          node.cond <- nodes[which(mpbn[,Marg.black[which(MB.order==i)[1],1]]==1)] #é€‰æ‹©æœèŠ‚ç‚¹çš„ç›¸é‚»èŠ‚ç‚¹
+          node.cond <- node.cond[-which(node.cond==order[i,1] | node.cond==order[i,2])] #å»é™¤å› èŠ‚ç‚¹
+          if (length(intersect(NPaset[[Marg.black[which(MB.order==i)[1],1]]], node.cond))>0) { #åˆ¤æ–­é€‰æ‹©çš„èŠ‚ç‚¹é‡Œæœ‰æ²¡æœ‰éçˆ¶èŠ‚ç‚¹
             node.cond <- node.cond[-match(intersect(NPaset[[Marg.black[which(MB.order==i)[1],1]]], node.cond), node.cond)]
           }
           if (length(node.cond)<n.condition) {
@@ -277,8 +277,8 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
           # print(3)
           cond.order <- data.frame(NULL)
           for (t in 1:2) {
-            node.cond <- nodes[which(mpbn[,order[i,t]]==1)] #½ÚµãµÄÏàÁÚ½Úµã
-            node.cond <- node.cond[-which(node.cond==order[i,1] | node.cond==order[i,2])]  #È¥³ıÁíÒ»½Úµã
+            node.cond <- nodes[which(mpbn[,order[i,t]]==1)] #èŠ‚ç‚¹çš„ç›¸é‚»èŠ‚ç‚¹
+            node.cond <- node.cond[-which(node.cond==order[i,1] | node.cond==order[i,2])]  #å»é™¤å¦ä¸€èŠ‚ç‚¹
             if (length(intersect(NPaset[[order[i,t]]], node.cond))>0) {
               node.cond <- node.cond[-match(intersect(NPaset[[order[i,t]]], node.cond), node.cond)]
             }
@@ -292,7 +292,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
             next
           }
         }
-        #°´ÕÕË³Ğò½øĞĞCItest
+        #æŒ‰ç…§é¡ºåºè¿›è¡ŒCItest
         for (j in 1:nrow(cond.order)) {
           # p.value <- ci.test(x = order[i,1], y = order[i,2], 
           #                    z = as.character(cond.order[j,]), data = data)
@@ -314,7 +314,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
         }
       }
       # print("c")
-      #±ß¼Ê°×Ãûµ¥À©Ôö
+      #è¾¹é™…ç™½åå•æ‰©å¢
       if (length(intersect(causal.record, MW.order))>=1) {
         spe <- intersect(causal.record, MW.order)
         if (is.list(spe)) {
@@ -323,7 +323,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
         for (k in spe) {
           for (m in 1:length(Sepset[[k]])) {
             if (length(Sepset[[k]][[m]])==1) {
-              #ÅĞ¶ÏĞÂ¼ÓÈëµÄÒò¹û¹ØÏµÊÇ·ñ»áµ¼ÖÂÃ¬¶Ü
+              #åˆ¤æ–­æ–°åŠ å…¥çš„å› æœå…³ç³»æ˜¯å¦ä¼šå¯¼è‡´çŸ›ç›¾
               if (Sepset[[k]][[m]]=="0") {
                 break
               }
@@ -364,7 +364,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
         MW.order <- unique(MW.order)
       }
       # print("C1")
-      #±ß¼ÊºÚÃûµ¥À©Ôö
+      #è¾¹é™…é»‘åå•æ‰©å¢
       if (length(intersect(causal.record, MB.order))>=1) {
         spe <- intersect(causal.record, MB.order)
         if (is.list(spe)) {
@@ -373,7 +373,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
         for (k in spe) {
           for (m in 1:length(Sepset[[k]])) {
             for (num in 1:length(Sepset[[k]][[m]])) {
-              if (Sepset[[k]][[m]]=="0") {
+              if (Sepset[[k]][[m]][1]=="0") {
                 break
               }
               if (innerconflict(Marg.black, c(Marg.black[which(MB.order==k)[1],1], Sepset[[k]][[m]][num]))==0) {
@@ -394,7 +394,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
       }
       # print("C2")
     }
-    #¾«¼ò±ß¼ÊºÚ°×Ãûµ¥£¬ÅĞ¶ÏÊÇ·ñÃ¬¶Ü
+    #ç²¾ç®€è¾¹é™…é»‘ç™½åå•ï¼Œåˆ¤æ–­æ˜¯å¦çŸ›ç›¾
     if (nrow(Marg.white)>0 & nrow(Marg.black)>0) {
       tmp <- conflict(MWr = Marg.white, MBr = Marg.black)
       Marg.white <- data.frame(tmp[[1]])
@@ -406,7 +406,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
       rm(tmp)
     }
     # print("d")
-    #¸üĞÂ·Ç¸¸½Úµã¼¯ºÏ
+    #æ›´æ–°éçˆ¶èŠ‚ç‚¹é›†åˆ
     if (nrow(Marg.black)>0) {
       for (i in 1:nrow(Marg.black)) {
         NPaset[[Marg.black[i, 2]]] <- c(NPaset[[Marg.black[i, 2]]], Marg.black[i,1])
@@ -417,12 +417,12 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
         NPaset[[Marg.white[i, 1]]] <- c(NPaset[[Marg.white[i, 1]]], Marg.white[i,2])
       }
     }
-    for (i in 1:length(NPaset)) { #È¥ÖØ
+    for (i in 1:length(NPaset)) { #å»é‡
       if (length(NPaset[[i]])>0) {
         NPaset[[i]] <- unique(NPaset[[i]])
       }
     }
-    #¸üĞÂÍ¼½á¹¹
+    #æ›´æ–°å›¾ç»“æ„
     if (length(delete.record)>=1) {
       record.order <- record.order[-match(delete.record, record.order)]
       for (i in delete.record) {
@@ -437,7 +437,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     }
   }
   
-  #¾«¼ò±ß¼ÊºÚ°×Ãûµ¥£¬ÅĞ¶ÏÊÇ·ñÃ¬¶Ü
+  #ç²¾ç®€è¾¹é™…é»‘ç™½åå•ï¼Œåˆ¤æ–­æ˜¯å¦çŸ›ç›¾
   if (nrow(Marg.white)>0 & nrow(Marg.black)>0) {
     tmp <- conflict(MWr = Marg.white, MBr = Marg.black)
     Marg.white <- data.frame(tmp[[1]])
@@ -449,14 +449,14 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     rm(tmp)
   }
   
-  #ÅĞ¶Ï³õÊ¼±ß¼Ê°×Ãûµ¥
+  #åˆ¤æ–­åˆå§‹è¾¹é™…ç™½åå•
   if (length(intersect(record.order, ini.MW.order))>=1) {
     MWtoW.order <- intersect(record.order, ini.MW.order)
     for (i in MWtoW.order) {
       mpbn[ini.Marg.white[which(ini.MW.order==i),2],ini.Marg.white[which(ini.MW.order==i),1]] <- 0
     }
   }
-  # #ÅĞ¶Ï³õÊ¼±ß¼ÊºÚÃûµ¥
+  # #åˆ¤æ–­åˆå§‹è¾¹é™…é»‘åå•
   # if (length(intersect(record.order, ini.MB.order))>=1) {
   #   MBtoB.order <- intersect(record.order, ini.MB.order)
   #   for (i in MBtoB.order) {
@@ -464,7 +464,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   #   }
   # }
   mpbn1 <- mpbn
-  # #ÅĞ¶ÏÊ£Óà±ß¼Ê°×Ãûµ¥
+  # #åˆ¤æ–­å‰©ä½™è¾¹é™…ç™½åå•
   # if (length(intersect(record.order, setdiff(MW.order,ini.MW.order)))>=1) {
   #   MWtoW.order <- intersect(record.order, setdiff(MW.order,ini.MW.order))
   #   for (i in MWtoW.order) {
@@ -472,7 +472,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   #   }
   # }
   # # print("dd")
-  # #ÅĞ¶ÏÊ£Óà±ß¼ÊºÚÃûµ¥
+  # #åˆ¤æ–­å‰©ä½™è¾¹é™…é»‘åå•
   # if (length(intersect(record.order, setdiff(MB.order,ini.MB.order)))>=1) {
   #   MBtoB.order <- intersect(record.order, setdiff(MB.order,ini.MB.order))
   #   for (i in MBtoB.order) {
@@ -502,7 +502,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   }
   # print("e")
   
-  #ÅĞ¶Ï³õÊ¼±ß¼ÊºÚÃûµ¥
+  #åˆ¤æ–­åˆå§‹è¾¹é™…é»‘åå•
   if (length(intersect(record.order, ini.MB.order))>=1) {
     MBtoB.order <- intersect(record.order, ini.MB.order)
     for (i in MBtoB.order) {
@@ -516,7 +516,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     }
   }
   # print("e")
-  #ÅĞ¶ÏÊ£Óà±ß¼Ê°×Ãûµ¥
+  #åˆ¤æ–­å‰©ä½™è¾¹é™…ç™½åå•
   if (length(intersect(record.order, setdiff(MW.order,ini.MW.order)))>=1) {
     MWtoW.order <- intersect(record.order, setdiff(MW.order,ini.MW.order))
     for (i in MWtoW.order) {
@@ -530,7 +530,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
     }
   }
   # print("e")
-  #ÅĞ¶ÏÊ£Óà±ß¼ÊºÚÃûµ¥
+  #åˆ¤æ–­å‰©ä½™è¾¹é™…é»‘åå•
   if (length(intersect(record.order, setdiff(MB.order,ini.MB.order)))>=1) {
     MBtoB.order <- intersect(record.order, setdiff(MB.order,ini.MB.order))
     for (i in MBtoB.order) {
@@ -557,21 +557,21 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
   
   
   # print("f")
-  #¼ÇÂ¼½á¹û
-  #ºÏ²¢ÖĞ¼ä½á¹û
+  #è®°å½•ç»“æœ
+  #åˆå¹¶ä¸­é—´ç»“æœ
   med_result <- list(Sepset=Sepset, M.whitelist=Marg.white, M.blacklist=Marg.black, 
                      whitelist=whitelist, blacklist=blacklist, order_use=order, 
                      remainedge=record.order,  NonParentSet=NPaset)
-  #·µ»Ø½á¹û
+  #è¿”å›ç»“æœ
   res <- list(bn=mpbn, n.test=n.test, result=med_result, input=input)
   return(res)
 }
 
 ############################
-#######    Ô¤´¦Àí    #######
+#######    é¢„å¤„ç†    #######
 ############################
 unshielded_triple <- function(all.arcs, und.arcs, from, to){
-  #Ñ¡È¡ÎŞÏò±ß
+  #é€‰å–æ— å‘è¾¹
   tmp <- und.arcs[-which(apply(und.arcs, 1, function(x) all(x==rev(c(from, to))))), ]
   tmp <- tmp[tmp[,1]==to,]
   res <- data.frame(NULL)
@@ -589,10 +589,10 @@ unshielded_triple <- function(all.arcs, und.arcs, from, to){
 }
 
 ############################
-#######ÅĞ¶Ïvstructure#######
+#######åˆ¤æ–­vstructure#######
 ############################
 v_struct <- function(adj.data, from, to, med){
-  #ÅĞ¶Ïorder
+  #åˆ¤æ–­order
   sel.order <- which(apply(adj.data$result$order_use, 1, function(x) (all(x==c(from, to)) | all(x==rev(c(from, to))))))
   if (is.null(adj.data$result$Sepset[[sel.order]])) {
     v_stru <- T
@@ -615,7 +615,7 @@ v_struct <- function(adj.data, from, to, med){
 }
 
 ############################
-#######   Àà±ğ×ª»»   #######
+#######   ç±»åˆ«è½¬æ¢   #######
 ############################
 conv_cg_to_bn <- function(edges){
   edges <- data.frame(edges)
@@ -627,7 +627,7 @@ conv_cg_to_bn <- function(edges){
 }
 
 ############################
-#######Ö÷º¯Êı¶¨Ïò½×¶Î#######
+#######ä¸»å‡½æ•°å®šå‘é˜¶æ®µ#######
 ############################
 MPBN.ori <- function(adj.data){
   if (!require('rlist')) {
@@ -636,18 +636,18 @@ MPBN.ori <- function(adj.data){
   if (!require('causality')) {
     stop('The package causality was not installed')
   }
-  #³éÈ¡unshielded triple
+  #æŠ½å–unshielded triple
   # print("g")
   all.arcs <- data.frame(arcs(adj.data$bn))
   und.arcs <- data.frame(undirected.arcs(adj.data$bn))
   unsh_tri <- triple(und_arc = und.arcs, arc = all.arcs)
   # unsh_tri <- list.rbind(apply(und.arcs, 1, function(x) unshielded_triple(all.arcs = all.arcs, und.arcs = und.arcs, from = x[1], to = x[2])))
   # unsh_tri <- unsh_tri[which(!duplicated(data.frame(t(apply(unsh_tri, 1, function(x) sort(x)))))),] 
-  #ÅĞ¶Ïv½á¹¹
+  #åˆ¤æ–­vç»“æ„
   if (nrow(unsh_tri)>0) {
     vtru <- v_stru(order = adj.data$result$order_use, triple = unsh_tri, Sepset = adj.data$result$Sepset)
     # vtru <- apply(unsh_tri, 1, function(x) v_struct(adj.data = adj.data, from = x[1], to = x[3], med = x[2]))
-    #¶¨Ïòv½á¹¹
+    #å®šå‘vç»“æ„
     for (i in 1:nrow(unsh_tri)) {
       if (vtru[i]==1) {
         adj.data$bn <- set.arc(adj.data$bn, from = unsh_tri[i,1], to = unsh_tri[i,2], check.cycles = F)
@@ -666,7 +666,7 @@ MPBN.ori <- function(adj.data){
         next
       }
     }
-    #¼ÇÂ¼½á¹û
+    #è®°å½•ç»“æœ
     adj.data$result[[length(adj.data$result)+1]] <- data.frame(unsh_tri,vtru)
     names(adj.data$result)[length(adj.data$result)] <- "unshielded_triple"
   }
@@ -699,7 +699,7 @@ MPBN.ori <- function(adj.data){
 }
 
 ############################
-#######    Ö÷º¯Êı    #######
+#######    ä¸»å‡½æ•°    #######
 ############################
 mpbn <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
                  M.blacklist=data.frame(from=NULL,to=NULL),
@@ -715,7 +715,7 @@ mpbn <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
 
 
 ###########################
-######   ¶¨ÏòPCDAG   ######
+######   å®šå‘PCDAG   ######
 ###########################
 
 hympbn <- function(res,data){
