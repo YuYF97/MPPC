@@ -377,12 +377,19 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
                 break
               }
               if (innerconflict(Marg.black, c(Marg.black[which(MB.order==k)[1],1], Sepset[[k]][[m]][num]))==0) {
-                add <- MB_single(MBr = Marg.black, MWr = Marg.white, 
+                if (nrow(Marg.white)>0) {
+                  add <- MB_single(MBr = Marg.black, MWr = Marg.white, 
                                  newMB = data.frame(from=Marg.black[which(MB.order==k)[1],1], to=Sepset[[k]][[m]][num]))
-                add <- data.frame(add)
-                Marg.black <- rbind(Marg.black, add)
-                tmp <- search(orderr = order, kwr = add)
-                MB.order <- append(MB.order, tmp)
+                  add <- data.frame(add)
+                  Marg.black <- rbind(Marg.black, add)
+                  tmp <- search(orderr = order, kwr = add)
+                  MB.order <- append(MB.order, tmp)
+                } else {
+                  add <- data.frame(from=Marg.black[which(MB.order==k)[1],1], to=Sepset[[k]][[m]][num])
+                  Marg.black <- rbind(Marg.black, add)
+                  tmp <- search(orderr = order, kwr = add)
+                  MB.order <- append(MB.order, tmp)
+                }
               } else {
                 next
               }
@@ -640,7 +647,8 @@ MPBN.ori <- function(adj.data){
   # print("g")
   all.arcs <- data.frame(arcs(adj.data$bn))
   und.arcs <- data.frame(undirected.arcs(adj.data$bn))
-  unsh_tri <- triple(und_arc = und.arcs, arc = all.arcs)
+  dir.arcs <- data.frame(directed.arcs(adj.data$bn))
+  unsh_tri <- triple(und_arc = und.arcs, arc = all.arcs, dir_arc = dir.arcs)
   # unsh_tri <- list.rbind(apply(und.arcs, 1, function(x) unshielded_triple(all.arcs = all.arcs, und.arcs = und.arcs, from = x[1], to = x[2])))
   # unsh_tri <- unsh_tri[which(!duplicated(data.frame(t(apply(unsh_tri, 1, function(x) sort(x)))))),] 
   #判断v结构
