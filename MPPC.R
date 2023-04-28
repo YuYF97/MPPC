@@ -324,7 +324,7 @@ MPBN.adj <- function(data, M.whitelist=data.frame(from=NULL,to=NULL),
           for (m in 1:length(Sepset[[k]])) {
             if (length(Sepset[[k]][[m]])==1) {
               #判断新加入的因果关系是否会导致矛盾
-              if (Sepset[[k]][[m]]=="0") {
+              if (Sepset[[k]][[m]][1]=="0") {
                 break
               }
               if (innerconflict(Marg.white, c(Marg.white[which(MW.order==k)[1],1], Sepset[[k]][[m]]))==0 & 
